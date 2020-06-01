@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "539913033833",
+    "firebase_url": "https://covid-19epass.firebaseio.com",
+    "project_id": "covid-19epass",
+    "storage_bucket": "covid-19epass.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539913033833:android:5f74ef0fd24e0c850f6af8",
+        "android_client_info": {
+          "package_name": "com.laurdson.epass"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "539913033833-imppa0ch4u21o5ek6r1l115vbhdcnhkj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.laurdson.epass",
+            "certificate_hash": "10d5a9c299b6c559f97d2302cb629cf58c721386"
+          }
+        },
+        {
+          "client_id": "539913033833-9osh17kp1a2gik389bgkc98s530u3kfd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSU51jlLPmtwjEK8KaEWosGErJ6Jgb15I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "539913033833-9osh17kp1a2gik389bgkc98s530u3kfd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

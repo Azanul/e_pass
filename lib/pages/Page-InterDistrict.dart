@@ -6,21 +6,24 @@ import 'package:epass/data/Data-Rep.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:epass/services/crud.dart';
 
-Widget _formTextInput(label, validErr, controller, {String hint = ''}) {
+Widget _formTextInput(label, validErr, TextEditingController controller, {String hint = ''}) {
   return TextFormField(
     decoration: InputDecoration(
         contentPadding: EdgeInsets.only(left: 25, right: 25),
         labelText: label,
-        hintText: hint
-    ),
+        hintText: hint),
     validator: (value) {
-      if (value.isEmpty) {
+      if (controller.text.isEmpty) {
         return validErr;
       }
-      return '';
+      return null;
     },
     controller: controller,
   );
+}
+
+class DowloadRef {
+  String aadhar, self, proof;
 }
 
 class IDTravel extends StatefulWidget {
@@ -59,37 +62,39 @@ class _IDTravelState extends State<IDTravel> {
   }
 
   File _aadharImage, _selfImage, _proofImage;
-  dynamic aadharDisplay = Icon(Icons.camera_alt), selfDisplay = Icon(Icons.camera_alt), proofDisplay = Icon(Icons.camera_alt);
   CrudMethods crudObj = new CrudMethods();
 
   Future getImage(opt) async {
-    var img = await ImagePicker.pickImage(source: ImageSource.camera);
-    setState(() {
-      switch (opt) {
-        case 1:
-          {
-            _aadharImage = img;
-            break;
-          }
-        case 2:
-          {
-            _selfImage = img;
-            break;
-          }
-        case 3:
-          {
-            _proofImage = img;
-            break;
-          }
-      }
+    await ImagePicker.pickImage(source: ImageSource.camera).then((img) {
+      setState(() {
+        switch (opt) {
+          case 1:
+            {
+              _aadharImage = img;
+              break;
+            }
+          case 2:
+            {
+              _selfImage = img;
+              break;
+            }
+          case 3:
+            {
+              _proofImage = img;
+              break;
+            }
+        }
+      });
     });
   }
 
   var myControllers;
+
   @override
   void initState() {
     _districts = List.from(_districts)..addAll(repo.getStates());
-    myControllers = List.generate(10, (index) => TextEditingController(), growable: false);
+    myControllers =
+        List.generate(10, (index) => TextEditingController(), growable: false);
     super.initState();
   }
 
@@ -219,10 +224,18 @@ class _IDTravelState extends State<IDTravel> {
                                 }).toList(),
                               ),
                             ]),
-                            _formTextInput('From area', 'Please enter name of the area', myControllers[0]),
-                            _formTextInput('Name', 'Please enter your name', myControllers[1]),
-                            _formTextInput('Address', 'Please enter your Address', myControllers[2]),
-                            _formTextInput('Objective of travel', 'Please enter why you are travelling', myControllers[3]),
+                            _formTextInput(
+                                'From area',
+                                'Please enter name of the area',
+                                myControllers[0]),
+                            _formTextInput('Name', 'Please enter your name',
+                                myControllers[1]),
+                            _formTextInput('Address',
+                                'Please enter your Address', myControllers[2]),
+                            _formTextInput(
+                                'Objective of travel',
+                                'Please enter why you are travelling',
+                                myControllers[3]),
                             Row(children: <Widget>[
                               Padding(
                                   padding: EdgeInsets.only(left: 10, right: 10),
@@ -255,8 +268,15 @@ class _IDTravelState extends State<IDTravel> {
                                 }).toList(),
                               ),
                             ]),
-                            _formTextInput('Vehicle Registration no.', 'Please enter your vehicle\'s registration number', myControllers[4], hint: 'CG09AB3214'),
-                            _formTextInput('Aadhar no.', 'Please enter your Aadhar card no.', myControllers[5]),
+                            _formTextInput(
+                                'Vehicle Registration no.',
+                                'Please enter your vehicle\'s registration number',
+                                myControllers[4],
+                                hint: 'CG09AB3214'),
+                            _formTextInput(
+                                'Aadhar no.',
+                                'Please enter your Aadhar card no.',
+                                myControllers[5]),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
@@ -266,11 +286,11 @@ class _IDTravelState extends State<IDTravel> {
                                     onPressed: () {
                                       showDatePicker(
                                               context: context,
-                                              initialDate: dtn
-                                                  .add(Duration(days: 1)),
+                                              initialDate:
+                                                  dtn.add(Duration(days: 1)),
                                               firstDate: dtn,
-                                              lastDate: dtn
-                                                  .add(Duration(days: 30)))
+                                              lastDate:
+                                                  dtn.add(Duration(days: 30)))
                                           .then((date) {
                                         _dateFrom = date;
                                       });
@@ -281,11 +301,11 @@ class _IDTravelState extends State<IDTravel> {
                                     onPressed: () {
                                       showDatePicker(
                                               context: context,
-                                              initialDate: dtn
-                                                  .add(Duration(days: 1)),
+                                              initialDate:
+                                                  dtn.add(Duration(days: 1)),
                                               firstDate: dtn,
-                                              lastDate: dtn
-                                                  .add(Duration(days: 30)))
+                                              lastDate:
+                                                  dtn.add(Duration(days: 30)))
                                           .then((date) {
                                         _dateTo = date;
                                       });
@@ -403,42 +423,42 @@ class _IDTravelState extends State<IDTravel> {
                                 }).toList(),
                               ),
                             ]),
-                            _formTextInput('To area', 'Please enter name of the area', myControllers[6]),
+                            _formTextInput(
+                                'To area',
+                                'Please enter name of the area',
+                                myControllers[6]),
                             SizedBox(
                               height: 10,
                             ),
                             Row(
                               children: <Widget>[
                                 FlatButton(
-                                    onPressed: () {
-                                      getImage(1);
-                                      setState(() {
-                                        aadharDisplay = Image(
-                                            image: ResizeImage(
-                                                FileImage(_aadharImage),
-                                                width:
-                                                screenSize(context).width ~/
-                                                    5 -
-                                                    10));
-                                      });
-                                    },
-                                    child: aadharDisplay,
+                                  onPressed: () {
+                                    getImage(1);
+                                  },
+                                  child: _aadharImage == null
+                                      ? Icon(Icons.camera_alt)
+                                      : Image(
+                                      image: ResizeImage(
+                                          FileImage(_aadharImage),
+                                          width:
+                                          screenSize(context).width ~/
+                                              5 -
+                                              10)),
                                 ),
                                 FlatButton(
                                     onPressed: () {
                                       getImage(2);
-                                      setState(() {
-                                        selfDisplay = Image(
-                                            image: ResizeImage(
-                                                FileImage(_aadharImage),
-                                                width:
-                                                screenSize(context).width ~/
-                                                    5 -
-                                                    10));
-                                      });
                                     },
-                                  child: aadharDisplay,
-                                ),
+                                    child: _selfImage == null
+                                        ? Icon(Icons.camera_alt)
+                                        : Image(
+                                            image: ResizeImage(
+                                                FileImage(_selfImage),
+                                                width:
+                                                    screenSize(context).width ~/
+                                                            5 -
+                                                        10))),
                                 FlatButton(
                                     onPressed: () {
                                       getImage(3);
@@ -459,23 +479,30 @@ class _IDTravelState extends State<IDTravel> {
                                   horizontal:
                                       screenSize(context).width / 4 + 4),
                               child: RaisedButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   // Validate returns true if the form is valid, or false
                                   // otherwise.
-//                                  if (_formKey.currentState.validate()) {
+                                  if (_formKey.currentState.validate()) {
                                     // If the form is valid, display a Snackbar.
+                                    DowloadRef _ref = new DowloadRef();
+                                    crudObj.upImg(_ref, _aadharImage, _selfImage, _proofImage).then((value) =>
+                                        Scaffold.of(context).showSnackBar(
+                                            SnackBar(
+                                                content:
+                                                Text('Processing Data')))
+                                    );
                                     Map<String, dynamic> formData = {
-                                      'Aadhar': _aadharImage,
+                                      'Aadhar': _ref.aadhar,
                                       'AadharNo': myControllers[5].text,
                                       'Address': myControllers[2].text,
                                       'DateInterval':
-                                          _dateFrom.compareTo(_dateTo),
+                                          _dateFrom.toString() + ' To ' + _dateTo.toString(),
                                       'From-Area': myControllers[0].text,
                                       'From-City': _lgaF,
                                       'From-District': _districtF,
                                       'Name': myControllers[1].text,
                                       'Phone': phNumber,
-                                      'Pic': _selfImage,
+                                      'Pic': _ref.self,
                                       'Reg.No.': myControllers[4].text,
                                       'TimeInterval': _timeFrom.toString() +
                                           ' To ' +
@@ -485,15 +512,15 @@ class _IDTravelState extends State<IDTravel> {
                                       'ToDistrict': _districtT,
                                       'TravelObj': myControllers[3].text,
                                       'Vehicle': vehicleType,
-                                      'proof': _proofImage
+                                      'proof': _ref.proof
                                     };
                                     crudObj.addData(formData).then((value) =>
                                         Scaffold.of(context).showSnackBar(
                                             SnackBar(
                                                 content:
-                                                    Text('Processing Data'))));
-                                  },
-//                                },
+                                                    Text('Form Submitted'))));
+                                  }
+                                },
                                 child: Text('Submit'),
                               ),
                             ),
